@@ -1,0 +1,28 @@
+[
+	{
+		"privnce": "湖南",
+		"citys": [
+			{
+				"cityName": "郴州",
+				"cityArea": ["苏仙区-郴州", "北湖区-郴州"]
+			},
+			{
+				"cityName": "长沙",
+				"cityArea": ["浏阳县-长沙", "长沙县-长沙"]
+			}
+		]
+	},
+	{
+		"privnce": "广东",
+		"citys": [
+			{
+				"cityName": "广州",
+				"cityArea": ["天河区-广州", "海珠区-广州"]
+			},
+			{
+				"cityName": "深圳",
+				"cityArea": ["南山区-深圳", "罗湖区-深圳"]
+			}
+		]
+	}
+]
