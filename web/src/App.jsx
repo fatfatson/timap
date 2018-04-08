@@ -20,7 +20,6 @@ type ComProps = {
 		name: string
 	},
 	dispatch: *,
-	receivedata: [],
 	loggingIn: boolean,
 	loggedIn: boolean
 };
@@ -65,7 +64,9 @@ class App extends Component<ComProps> {
 	render() {
 		return (
 			<Router history={history}>
-				<div>
+				<div
+					style={{ display: 'flex', flexDirection: 'column', flex: '1 1 auto' }}
+				>
 					<AlertContainer ref={a => (this.msg = a)} {...this.alertOptions} />
 					<header className="App-header" align="center">
 						<img
@@ -84,11 +85,13 @@ class App extends Component<ComProps> {
 						<NavLink to="/">Home</NavLink>&nbsp;&nbsp;
 						<NavLink to="/about">About</NavLink>&nbsp;&nbsp;
 					</ul>
-					<hr />
-					<Switch>
-						<Route exact path="/" component={Home} />
-						<Route path="/about" component={About} />
-					</Switch>
+					<hr style={{ width: '100%' }} />
+					<div style={{ display: 'flex', flexGrow: 1 }}>
+						<Switch>
+							<Route exact path="/" component={Home} />
+							<Route path="/about" component={About} />
+						</Switch>
+					</div>
 				</div>
 			</Router>
 		);

@@ -1,27 +1,32 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import { InfiniteLoader, List } from 'react-virtualized';
+import { InfiniteLoader, List, AutoSizer } from 'react-virtualized';
+import TimelineContainer from './_components/TimelineContainer';
 var Infinite = require('react-infinite');
 
-function MyComponent({
-	/** Are there more items to load? (This information comes from the most recent API request.) */
-	hasNextPage,
-	/** Are we currently loading a page of items? (This may be an in-flight flag in your Redux store for example.) */
-	isNextPageLoading,
-	/** List of items loaded so far */
-	list,
-	/** Callback function (eg. Redux action-creator) responsible for loading the next page of items */
-	loadNextPage
-}) {
-	// If there are more items to be loaded then add an extra row to hold a loading indicator.
-	const rowCount = hasNextPage ? list.size + 1 : list.size;
+function MyComponent({ list }) {
+	list = _.range(1, 50);
+	const rowCount = list.length;
 
+	var mapLoaded = {};
 	// Only load 1 page of items at a time.
 	// Pass an empty callback to InfiniteLoader in case it asks us to load more than once.
-	const loadMoreRows = isNextPageLoading ? () => {} : loadNextPage;
+	const loadMoreRows = ({ startIndex: si, stopIndex: ei }) => {
+		console.log('loadmore', si, ei);
+		for (var k = si; k <= ei; k++) {
+			mapLoaded[k] = true;
+		}
+		var self = this;
+		return new Promise(fill => {
+			setTimeout(() => {
+				console.log('load ok');
+				fill();
+			}, 1);
+		});
+	};
 
 	// Every row is loaded except for our loading indicator row.
-	const isRowLoaded = ({ index }) => !hasNextPage || index < list.size;
+	const isRowLoaded = ({ index }) => mapLoaded[index];
 
 	// Render a list item or a loading indicator.
 	const rowRenderer = ({ index, key, style }) => {
@@ -30,7 +35,7 @@ function MyComponent({
 		if (!isRowLoaded({ index })) {
 			content = 'Loading...';
 		} else {
-			content = list.getIn([index, 'name']);
+			content = 'year' + index;
 		}
 
 		return (
@@ -47,11 +52,19 @@ function MyComponent({
 			rowCount={rowCount}
 		>
 			{({ onRowsRendered, registerChild }) => (
-				<List
-					ref={registerChild}
-					onRowsRendered={onRowsRendered}
-					rowRenderer={rowRenderer}
-				/>
+				<AutoSizer disableHeight>
+					{({ width }) => (
+						<List
+							ref={registerChild}
+							onRowsRendered={onRowsRendered}
+							rowRenderer={rowRenderer}
+							height={300}
+							width={width}
+							rowHeight={20}
+							rowCount={rowCount}
+						/>
+					)}
+				</AutoSizer>
 			)}
 		</InfiniteLoader>
 	);
@@ -79,20 +92,7 @@ class Home extends Component {
 		return es;
 	}
 	render() {
-		return (
-			<MyComponent />
-			// <Infinite
-			// 	styles={{ flex: 1, backgroundColor: 'red' }}
-			// 	//useWindowAsScrollContainer
-			// 	containerHeight={1400}
-			// 	elementHeight={40}
-			// 	onLayout={(...args) => {
-			// 		console.log(args);
-			// 	}}
-			// >
-			// 	{this.state.elements}
-			// </Infinite>
-		);
+		return <TimelineContainer range={[1900, 1950, 'y']} />;
 	}
 }
 
