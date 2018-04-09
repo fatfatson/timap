@@ -1,6 +1,4 @@
-/*
-@providesModule common
-*/
+
 export function isEmpty(str) {
 	return str === null || str === '' || str === undefined;
 }
@@ -20,7 +18,7 @@ export function getRandomArbitrary(min, max) {
 }
 
 export function sleep(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms));
+	//return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export var bindThis = function(obj, ...args) {
